@@ -7,8 +7,8 @@ from huggingface_hub import hf_hub_download
 import torch
 
 # initialize the embeddings and csv file
-embeddings_path = hf_hub_download(repo_id='ccristil/bom_embeddings', filename='bom_embeddings.npy')
-df_path = hf_hub_download(repo_id='ccristil/bom_embeddings', filename='bom.csv')
+embeddings_path = hf_hub_download(repo_id="ccristil/bom_embeddings", filename="bom_embeddings.npy",repo_type="dataset")
+df_path = hf_hub_download(repo_id="ccristil/bom_embeddings", filename="bom.csv", repo_type="dataset")
 
 embeddings = np.load(embeddings_path)
 df = pd.read_csv(df_path)
