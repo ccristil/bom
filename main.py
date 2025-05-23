@@ -6,12 +6,18 @@
 # import torch
 import streamlit as st
 
+st.set_page_config(
+    page_title = "BoM App",
+    page_icon = "images/bom_logo.png",
+    layout = "wide",
+)
+st.logo('images/bom_logo.png')
 # initialize the navbar to include all of the pages
 pages = {
     "Navigation" : [
-        st.Page("home.py"),
-        st.Page("about.py"),
-        st.Page("contact.py")
+        st.Page("pages/home.py", icon=":material/home:"),
+        st.Page("pages/about.py", icon=":material/menu_book:"),
+        st.Page("pages/contact.py", icon=":material/contact_page:")
     ]
  }
 pg = st.navigation(pages)
