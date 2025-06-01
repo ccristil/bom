@@ -13,12 +13,12 @@ st.set_page_config(
 )
 st.logo('images/bom_logo.png')
 # initialize the navbar to include all of the pages
-pages = {
-    "Navigation" : [
+pages = [
+
         st.Page("pages/home.py", icon=":material/home:"),
         st.Page("pages/about.py", icon=":material/menu_book:"),
         st.Page("pages/contact.py", icon=":material/contact_page:")
-    ]
- }
+
+ ]
 pg = st.navigation(pages)
 pg.run()

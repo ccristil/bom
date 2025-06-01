@@ -21,4 +21,10 @@ for tool in tools:
 
 st.header("How it works⚙️")
 
-st.write("About the app")
+st.write("At a high level, when you input your prompt it gets sent a model that is built to recognize patterns and feeling"
+         "in text. This particular model was trained on all of the standard works of the Church of Jesus Christ of Latter-Day "
+         "Saints. The model will take your input and figure out what verses are most closely related to the 'feeling' that "
+         "your input has. This means that it's not just matching keywords, but analyzing the deeper meaning of to get more holistic matches.")
+
+
+st.write("For a more in depth look into how it works go [here](https://www.marqo.ai/course/introduction-to-sentence-transformers).")

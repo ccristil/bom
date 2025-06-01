@@ -8,29 +8,23 @@ import torch
 import random as rd
 from helper_functions import get_model, url_abbreviations
 
-
+# initialize the placeholder
 placeholders = [
     "I feel lonely and I want some comfort...",
-    "How can I find peace when I’m anxious?",
+    "I am feeling anxious...",
     "What do the scriptures say about forgiveness?",
     "I’m struggling with faith — what can help?",
-    "How do I deal with anger or frustration?",
-    "I want to feel closer to God — where do I start?",
-    "What is the purpose of trials in life?",
+    "I am feeling anger or frustration -- how can I deal with it?",
+    "I want to feel closer to God...",
+    "What is the purpose of trials?",
     "How can I strengthen my testimony?",
-    "What does the Bible teach about love?",
-    "I feel lost — is there hope for me?"
+    "What is God's love?",
+    "I feel lost."
 ]
 if 'placeholder' not in st.session_state:
     st.session_state.placeholder = rd.choice(placeholders)
 st.title("Home")
 
-# initialize the embeddings and csv file
-# embeddings_path = hf_hub_download(repo_id="ccristil/bom_embeddings", filename="bom_embeddings.npy",repo_type="dataset")
-# df_path = hf_hub_download(repo_id="ccristil/bom_embeddings", filename="bom.csv", repo_type="dataset")
-#
-# embeddings = np.load(embeddings_path)
-# df = pd.read_csv(df_path)
 
 # device agnostic code
 if torch.backends.mps.is_available():
@@ -38,11 +32,8 @@ if torch.backends.mps.is_available():
 else:
     device = torch.device("cpu")
 
-# load data
+# load model
 model = SentenceTransformer('all-MiniLM-L6-v2')
-# embeddings = np.load('data/bom_embeddings.npy')
-# df = pd.read_csv('data/bom.csv')
-
 
 ### logic ###
 def get_url(book_title, chapter_number, verse_number):
@@ -56,8 +47,6 @@ def get_url(book_title, chapter_number, verse_number):
       "Pearl of Great Price" : "pgp"
   }
   volume = volume_dict[option]
-
-
 
   book = url_abbreviations[book_title]
 
@@ -86,21 +75,16 @@ st.title("_✨ Ask and Ye Shall Find: Semantic Search for Scripture_")
 st.write("Type in a question, emotion, or phrase — and discover relevant verses.")
 volumes = ['Book of Mormon','New Testament','Old Testament','Doctrine and Covenants','Pearl of Great Price']
 
-
-option = st.selectbox('📜 What volume of scripture would you like the verses to be from?',volumes)
-# number = st.number_input("🔢 How many verses would you like?", 0, 10,5)
-
-# if option == 'New Testament':
-#     nt_embeddings_path = hf_hub_download(repo_id="ccristil/bom_embeddings", filename="nt_embeddings.npy", repo_type="dataset")
-#     embeddings = np.load(nt_embeddings_path)
-#
-#     nt_df_path = hf_hub_download(repo_id="ccristil/bom_embeddings", filename="new_testament.csv", repo_type="dataset")
-#     df = pd.read_csv(nt_df_path)
-
+cols=st.columns(2)
+with cols[0]:
+    option = st.selectbox('📜 What volume of scripture would you like the verses to be from?',volumes)
+with cols[1]:
+    number = st.number_input("🔢 How many verses do you want to get back?", 0, 15,5)
 
 
 query = st.text_input("**🔍 What’s on your mind?**",
-                      placeholder=st.session_state.placeholder)
+                      placeholder=st.session_state.placeholder,
+                      help="Start broad—something simple like ‘I feel alone’ works great. Refine later if needed. Enjoy! 😊")
 
 df, embeddings = get_model(option=option)
 
@@ -110,6 +94,7 @@ if query:
         indices = get_similar_verses(input=query,
                                      model=model,
                                      embeddings=embeddings,
+                                     num_to_return=number,
                                      option=option)
     for idx in indices:
         verse = df.iloc[idx]
